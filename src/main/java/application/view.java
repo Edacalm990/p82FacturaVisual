@@ -40,6 +40,7 @@ public class view extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         listaFacturasPanel = new javax.swing.JList<>();
         cargar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,11 +68,15 @@ public class view extends javax.swing.JFrame {
         });
 
         listaFacturasPanel.setBackground(new java.awt.Color(255, 255, 255));
+        listaFacturasPanel.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
+        listaFacturasPanel.setForeground(new java.awt.Color(102, 102, 102));
         listaFacturasPanel.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        listaFacturasPanel.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listaFacturasPanel.setSelectionBackground(new java.awt.Color(204, 204, 204));
         jScrollPane1.setViewportView(listaFacturasPanel);
 
         cargar.setText("cargar");
@@ -81,6 +86,10 @@ public class view extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setText("FACTURAS");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -88,21 +97,25 @@ public class view extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 841, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(crear)
-                        .addGap(18, 18, 18)
-                        .addComponent(editar)
-                        .addGap(18, 18, 18)
-                        .addComponent(borrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cargar)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 841, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(crear)
+                            .addGap(18, 18, 18)
+                            .addComponent(editar)
+                            .addGap(18, 18, 18)
+                            .addComponent(borrar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 613, Short.MAX_VALUE)
+                            .addComponent(cargar))))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(82, Short.MAX_VALUE)
+                .addContainerGap(21, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -138,7 +151,8 @@ public class view extends javax.swing.JFrame {
     }//GEN-LAST:event_editarActionPerformed
 
     private void borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarActionPerformed
-        // TODO add your handling code here:
+        System.out.println(listaFacturasPanel.getAnchorSelectionIndex());
+        
     }//GEN-LAST:event_borrarActionPerformed
 
     private void cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarActionPerformed
@@ -192,6 +206,7 @@ public class view extends javax.swing.JFrame {
     private javax.swing.JButton cargar;
     private javax.swing.JButton crear;
     private javax.swing.JButton editar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listaFacturasPanel;
