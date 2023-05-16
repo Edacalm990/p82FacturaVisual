@@ -109,6 +109,7 @@ public class Confirmacion extends javax.swing.JFrame {
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
         try {
             controladorFactura.destroy(index);
+            
             View vista = new View();
             vista.setVisible(true);
             vista.setLocationRelativeTo(null);

@@ -193,6 +193,8 @@ public class View extends javax.swing.JFrame {
             confirmacion.setLocationRelativeTo(null);
             // se cierra el panel actual
             dispose();
+            
+            
         }
     }//GEN-LAST:event_borrarActionPerformed
 
