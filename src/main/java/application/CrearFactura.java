@@ -15,13 +15,14 @@ import javax.persistence.Persistence;
  *
  * @author eli
  */
-public class crearFactura extends javax.swing.JFrame {
+public class CrearFactura extends javax.swing.JFrame {
+
     private FacturaJpaController controladorFactura = new FacturaJpaController(Persistence.createEntityManagerFactory("p82"));
 
     /**
      * Creates new form crearFactura
      */
-    public crearFactura() {
+    public CrearFactura() {
         initComponents();
     }
 
@@ -44,8 +45,8 @@ public class crearFactura extends javax.swing.JFrame {
         descripcion = new javax.swing.JTextField();
         importe = new javax.swing.JTextField();
         panelPK = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        cancelarBoton = new javax.swing.JButton();
+        crearBoton = new javax.swing.JButton();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -81,17 +82,17 @@ public class crearFactura extends javax.swing.JFrame {
 
         panelPK.setFont(new java.awt.Font("Liberation Sans", 1, 48)); // NOI18N
 
-        jButton1.setText("cancelar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cancelarBoton.setText("cancelar");
+        cancelarBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cancelarBotonActionPerformed(evt);
             }
         });
 
-        jButton2.setText("+");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        crearBoton.setText("+");
+        crearBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                crearBotonActionPerformed(evt);
             }
         });
 
@@ -113,9 +114,9 @@ public class crearFactura extends javax.swing.JFrame {
                         .addGap(68, 68, 68)
                         .addComponent(panelPK, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(crearBoton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cancelarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -138,8 +139,8 @@ public class crearFactura extends javax.swing.JFrame {
                 .addComponent(importe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(crearBoton)
+                    .addComponent(cancelarBoton))
                 .addContainerGap())
         );
 
@@ -161,23 +162,38 @@ public class crearFactura extends javax.swing.JFrame {
 
     }//GEN-LAST:event_fechaActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void cancelarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarBotonActionPerformed
+        View vista= new View();
+        vista.setVisible(true);
+        vista.setLocationRelativeTo(null);
+        dispose();
+    }//GEN-LAST:event_cancelarBotonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void crearBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearBotonActionPerformed
+
         Factura factura = new Factura();
-        factura.setDescripcion(descripcion.getText());
-        
-        factura.setFechaEmision(Date.valueOf(convertirFecha(fecha.getText())));
-        //System.out.println(convertirImporte(importe.getText()));
-        try {
-            controladorFactura.create(factura);
-        } catch (Exception e) {
+        LocalDate fechaFactura = convertirFecha(fecha.getText());
+        double importeFactura = convertirImporte(importe.getText());
+        if (fechaFactura!=null && importeFactura != 0) {
+            factura.setDescripcion(descripcion.getText());
+            factura.setFechaEmision(Date.valueOf(fechaFactura));
+            factura.setTotalImporte(importeFactura);
+            try {
+                controladorFactura.create(factura);
+                View vista= new View();
+                vista.setVisible(true);
+                vista.setLocationRelativeTo(null);
+                dispose();
+            } catch (Exception e) {
+                System.out.println(e);
+                Error error = new Error("Error: No se ha podido hacer la inserción, vuelva a interntarlo'");
+                error.setVisible(true);
+                error.setLocationRelativeTo(null);
+            }
         }
-        
 
-    }//GEN-LAST:event_jButton2ActionPerformed
+
+    }//GEN-LAST:event_crearBotonActionPerformed
 
     private LocalDate convertirFecha(String fechaTexto) {
         try {
@@ -185,7 +201,7 @@ public class crearFactura extends javax.swing.JFrame {
         } catch (Exception e) {
             Error error = new Error("Error: la fecha debe tener el formato 'dd/mm/yyyy'");
             error.setVisible(true);
-
+            error.setLocationRelativeTo(null);
         }
         return null;
     }
@@ -196,51 +212,52 @@ public class crearFactura extends javax.swing.JFrame {
         } catch (Exception e) {
             Error error = new Error("Error: Debe ser un número'");
             error.setVisible(true);
+            error.setLocationRelativeTo(null);
         }
         return 0;
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(crearFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(crearFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(crearFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(crearFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new crearFactura().setVisible(true);
-            }
-        });
-    }
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(CrearFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(CrearFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(CrearFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(CrearFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new CrearFactura().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cancelarBoton;
+    private javax.swing.JButton crearBoton;
     private javax.swing.JTextField descripcion;
     private javax.swing.JTextField fecha;
     private javax.swing.JTextField importe;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

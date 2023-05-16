@@ -4,6 +4,7 @@
  */
 package mainFacturas;
 
+import application.View;
 import controllers.FacturaJpaController;
 import entities.Factura;
 import java.math.BigDecimal;
@@ -21,7 +22,9 @@ public class P82elisabet {
 
     public static void main(String[] args) {
         FacturaJpaController controladorFactura = new FacturaJpaController(Persistence.createEntityManagerFactory("p82"));
-
+        View vistaPrincipal= new View();
+        vistaPrincipal.setVisible(true);
+        vistaPrincipal.setLocationRelativeTo(null);
     }
 
     // Crea un objeto EntityManager usando una unidad de persistencia
