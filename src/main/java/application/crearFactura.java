@@ -4,17 +4,20 @@
  */
 package application;
 
+import controllers.FacturaJpaController;
+import entities.Factura;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.persistence.Persistence;
 
 /**
  *
  * @author eli
  */
 public class crearFactura extends javax.swing.JFrame {
-    private LocalDate f;
-    private String d;
-    private double i;
+    private FacturaJpaController controladorFactura = new FacturaJpaController(Persistence.createEntityManagerFactory("p82"));
+
     /**
      * Creates new form crearFactura
      */
@@ -155,7 +158,7 @@ public class crearFactura extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void fechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fechaActionPerformed
-        
+
     }//GEN-LAST:event_fechaActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -163,31 +166,40 @@ public class crearFactura extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        System.out.println(convertirFecha(fecha.getText()));
+        Factura factura = new Factura();
+        factura.setDescripcion(descripcion.getText());
         
+        factura.setFechaEmision(Date.valueOf(convertirFecha(fecha.getText())));
+        //System.out.println(convertirImporte(importe.getText()));
+        try {
+            controladorFactura.create(factura);
+        } catch (Exception e) {
+        }
         
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private LocalDate convertirFecha(String fechaTexto){
+    private LocalDate convertirFecha(String fechaTexto) {
         try {
             return LocalDate.parse(fechaTexto, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         } catch (Exception e) {
-            Error error= new Error("Error: la fecha debe tener el formato 'dd/mm/yyyy'");
+            Error error = new Error("Error: la fecha debe tener el formato 'dd/mm/yyyy'");
             error.setVisible(true);
-            
+
         }
         return null;
     }
-    
-    private double convertirImporte(String importeTexto){
+
+    private double convertirImporte(String importeTexto) {
         try {
-            return Double.parseDouble(importeTexto);
+            return Double.parseDouble(importeTexto.contains(",") ? importeTexto.replace(",", ".") : importeTexto);
         } catch (Exception e) {
-            Error error= new Error("Error: Debe ser un número'");
+            Error error = new Error("Error: Debe ser un número'");
             error.setVisible(true);
         }
         return 0;
     }
+
     /**
      * @param args the command line arguments
      */
