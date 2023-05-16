@@ -6,6 +6,7 @@ package application;
 
 import controllers.FacturaJpaController;
 import entities.Factura;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Persistence;
@@ -15,13 +16,17 @@ import javax.persistence.Persistence;
  * @author eli
  */
 public class view extends javax.swing.JFrame {
+
     private FacturaJpaController controladorFactura = new FacturaJpaController(Persistence.createEntityManagerFactory("p82"));
+    private List<Factura> listaFacturas;
 
     /**
      * Creates new form view
      */
     public view() {
+        listaFacturas=new ArrayList<>();
         initComponents();
+        cargarFacturas();
     }
 
     /**
@@ -141,9 +146,9 @@ public class view extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearActionPerformed
-       crearFactura panelCrear= new crearFactura();
-       panelCrear.setVisible(true);
-       panelCrear.setLocationRelativeTo(null);
+        crearFactura panelCrear = new crearFactura();
+        panelCrear.setVisible(true);
+        panelCrear.setLocationRelativeTo(null);
     }//GEN-LAST:event_crearActionPerformed
 
     private void editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarActionPerformed
@@ -151,25 +156,26 @@ public class view extends javax.swing.JFrame {
     }//GEN-LAST:event_editarActionPerformed
 
     private void borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarActionPerformed
-        System.out.println(listaFacturasPanel.getAnchorSelectionIndex());
+        int index=listaFacturasPanel.getAnchorSelectionIndex();
+        System.out.println(index);
+        try {
+            controladorFactura.destroy(listaFacturas.get(index).getCodigoUnico());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         
+
     }//GEN-LAST:event_borrarActionPerformed
 
     private void cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarActionPerformed
-        List<Factura> listaFacturas= controladorFactura.findFacturaEntities();
-        String [] listaFacturaString= new String [listaFacturas.size()];
-        for (int i = 0; i < listaFacturas.size(); i++) {
-            Factura get = listaFacturas.get(i);
-            listaFacturaString[i]=get.toString();
-        }
-        listaFacturasPanel.setListData(listaFacturaString);
+       cargarFacturas();
     }//GEN-LAST:event_cargarActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -199,6 +205,20 @@ public class view extends javax.swing.JFrame {
                 new view().setVisible(true);
             }
         });
+    }
+    
+    private void cargarFacturas() {
+     this.listaFacturas=controladorFactura.findFacturaEntities();
+        String[] listaFacturaString = new String[listaFacturas.size()];
+        if (listaFacturas.isEmpty()) {
+            listaFacturaString[0]="No existen facturas";
+        } else {
+            for (int i = 0; i < listaFacturas.size(); i++) {
+                Factura get = listaFacturas.get(i);
+                listaFacturaString[i] = get.toString();
+            }
+        }
+        listaFacturasPanel.setListData(listaFacturaString);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
